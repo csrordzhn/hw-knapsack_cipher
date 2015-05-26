@@ -69,7 +69,22 @@ class KnapsackCipher
   def self.decrypt(cipherarray, superknap=DEF_SUPER, m=M, n=N)
     raise(ArgumentError, "Argument should be a SuperKnapsack object"
       ) unless superknap.is_a? SuperKnapsack
-
+    inverse_mod = ModularArithmetic.invert(m, n)
+    decrypted_binary = ""
+    cipherarray.each do |x|
+      secret_number = (x*inverse_mod) % n
+      binary =""
+      superknap.reverse.each do |c|
+         if c <= secret_number
+           binary << '1'
+           secret_number -= c
+         else
+           binary << '0'
+         end
+      end
+      decrypted_binary << binary.reverse
+    end
+    [decrypted_binary].pack("B*")
     # TODO: implement this method
   end
 end
