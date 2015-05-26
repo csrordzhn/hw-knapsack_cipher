@@ -46,6 +46,16 @@ class KnapsackCipher
   # - Array of encrypted numbers
   def self.encrypt(plaintext, generalknap=DEF_GENERAL)
     # TODO: implement this method
+    binary_msg = (plaintext.unpack("B*"))[0].chars.map {|c|c.to_i}
+
+    cipherarray=[]
+
+    (binary_msg.each_slice(8).to_a).each do |b|
+      calc_num = (b.zip(generalknap.cycle)).map { |c,d| c*d}
+      cipherarray << calc_num.inject{|sum,x| sum + x }
+    end
+
+    return cipherarray
   end
 
   # Decrypts encrypted Array
